@@ -30,7 +30,7 @@ How can we ensure that all network traffic from the Node Pool passes through the
 This DIY solution involves the following:
 * Deploy a (multi-AZ) VMSS in the *snet-routed* subnet
 * Provision an Internal Load Balancer (ILB)
-    * Frontend IP: *snet-not-routed*
+    * Frontend IP: *snet-routed*
     * Backend Pool: VMSS
     * Load Balancing Rule: HA Ports
 * Route all traffic from the *snet-not-routed* subnet to the ILB's frontend IP using a Route Table.
@@ -64,11 +64,6 @@ iptables -t nat
 **Drawbacks**: 
 - This is not a managed service
 - Create a short init script to configure iptables on the VM according to its network interface.
-
-
-
-
-
 
 ## Solution #2: Azure Firewall 
 
