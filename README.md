@@ -53,8 +53,11 @@ iptables -t nat
     -o eth0 
     -d 10.0.0.0/8 
     -j SNAT 	
-    --to-source 10.0.1.4
+    --to-source 10.0.1.5
 ```
+
+> [!NOTE]  
+> [IP forwarding](https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-network-interface?tabs=azure-portal#enable-or-disable-ip-forwarding) must be enabled at VMSS NICs level.
 
 **Advantages**:
 - Low-cost solution
