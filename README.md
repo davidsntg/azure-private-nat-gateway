@@ -13,13 +13,13 @@ This article presents two solutions to address this gap.
 
 Assume the following topology:
 * An AKS Node Pool is deployed in a non-routed subnet  *snet-not-routed (100.64.0.0/10)*
-* A small, routable subnet *snet-routed (100.0.1.0/29)*, is used for egress, hosting instances that will perform SNAT
+* A small, routable subnet *snet-routed (10.0.1.0/29)*, is used for egress, hosting instances that will perform SNAT
 * `vnet-spoke01` is peered with `hub-VNet`. To avoid propagating *snet-not-routed* range, use:
   * [Subnet peering feature](https://learn.microsoft.com/en-us/azure/virtual-network/how-to-configure-subnet-peering), in a Hub&Spoke model
   * [Route-maps](https://learn.microsoft.com/en-us/azure/virtual-wan/route-maps-about) inbound rule, in a Virtual WAN model
 
 > [!NOTE]  
-> This article do not cover the ingress controller aspect, which could involved another small subnet within `vnet-spoke01`
+> This article does not cover the ingress controller aspect, which could involve another small subnet within `vnet-spoke01`
 
 ![context](./img/context.png)
 
@@ -30,7 +30,7 @@ How can we ensure that all network traffic from the Node Pool passes through the
 This DIY solution involves the following:
 * Deploy a (multi-AZ) VMSS in the *snet-routed* subnet
 * Provision an Internal Load Balancer (ILB)
-    * Frontend IP: *snet-routed*
+    * Frontend IP: *snet-routed*, 10.0.1.4
     * Backend Pool: VMSS
     * Load Balancing Rule: HA Ports
 * Route all traffic from the *snet-not-routed* subnet to the ILB's frontend IP using a Route Table.
@@ -84,7 +84,7 @@ The second solution consists of:
 - Integrated with Azure monitoring and loging
 
 **Drawbacks**: 
-- Rquires a larger subnet (/26 minimum) compared to the /29 neeeded for VMSS.
+- Requires a larger subnet (/26 minimum) compared to the /29 neeeded for VMSS.
 - Higher Cost: Azure Firewall (Basic SKU) is ~$288 monthly
 
 # Conclusion
